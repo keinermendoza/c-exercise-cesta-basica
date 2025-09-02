@@ -3,7 +3,7 @@
 Este programa em C calcula a variação de preços de alguns itens da cesta básica e avalia a situação de cada item (alta, baixa ou estável).  
 
 ## Demo
-
+![cesta-basica-demo](https://github.com/user-attachments/assets/0e5b39b4-44b6-414e-8b22-cb30cf54a2eb)
 
 ## Como usar
 
@@ -12,6 +12,7 @@ Este programa em C calcula a variação de preços de alguns itens da cesta bás
 gcc CestaBasica.c -o CestaBasica
 ```
 2. Executar
+
 
 ```bash
 ./CestaBasica
