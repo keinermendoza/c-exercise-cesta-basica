@@ -3,7 +3,7 @@
 
 typedef struct 
 {
-    char* nome;
+    char nome[100];
     float preco_anterior;
     float preco_atual;
     float variacao;
@@ -91,14 +91,14 @@ int main()  {
             situacao = "ESTÁVEL";
         }
 
-        ProdutoCestaBasica temp = {
-            nome,
-            preco_anterior,
-            preco_atual,
-            variacao,
-            situacao,
-            variacao_teve_abuso
-        };
+        ProdutoCestaBasica temp;
+
+        strcpy(temp.nome, nome);
+        temp.preco_anterior = preco_anterior;
+        temp.preco_atual = preco_atual;
+        temp.variacao = variacao;
+        temp.situacao = situacao;
+        temp.variacao_teve_abuso = variacao_teve_abuso;
 
         cesta_basica[i] = temp;
         i++;
