@@ -1,0 +1,13 @@
+{
+  "name": "C Development",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "settings": {},
+  "extensions": [
+    "ms-vscode.cpptools"
+  ],
+  "forwardPorts": [],
+  "postCreateCommand": "",
+  "remoteUser": "vscode"
+}
