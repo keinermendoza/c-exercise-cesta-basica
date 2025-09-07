@@ -1,92 +1,125 @@
 #include <stdio.h>
+#include <string.h>
 
-/* Declaração de funções. Implementações estão depois de main */
-float calcular_variacao(float preco_anterior, float preco_atual);
-void printar_item_de_cesta(char * nome, float preco_anterior, float preco_atual, float variacao, char * situacao);
-char* avaliar_situacao_item_de_cesta(float variacao);
+typedef struct 
+{
+    char* nome;
+    float preco_anterior;
+    float preco_atual;
+    float variacao;
+    char* situacao;
+    int variacao_teve_abuso;
+} ProdutoCestaBasica;
 
 int main()  {
-    // LER nome do item Arroz
-    char* arroz_nome = "Arroz";
+    int PRODUCT_NUMBER = 3;
+    ProdutoCestaBasica cesta_basica[PRODUCT_NUMBER];
 
-    // LER preço do mês anterior do item Arroz
-    float arroz_preco_anterior = 20.0;
+    // variáveis temporárias
+    char nome[100];
+    float preco_anterior;
+    float preco_atual;
+    float variacao;
+    char* situacao;
+    int variacao_teve_abuso = 0;
+    int i = 0;
+    int leitura_correta = 0;
 
-    // LER preço do mês atual do item Arroz
-    float arroz_preco_atual = 22.5;
-
-    // CALCULAR e armazenar variação de preços do item Arroz
-    float arroz_variacao = calcular_variacao(arroz_preco_anterior, arroz_preco_atual); 
-
-    // AVALIAR e armazenar situação do item Arroz
-    char* arroz_situacao = avaliar_situacao_item_de_cesta(arroz_variacao);
-
-
-    // LER nome do item Feijão
-    char* feijao_nome = "Feijão";
-
-    // LER preço do mês anterior do item Feijão
-    float feijao_preco_anterior = 8.0;
-
-    // LER preço do mês atual do item Feijão
-    float feijao_preco_atual = 8.0;
-
-    // CALCULAR e armazenar variação de preços do item Feijão
-    float feijao_variacao = calcular_variacao(feijao_preco_anterior, feijao_preco_atual); 
-
-    // AVALIAR e armazenar situação do item Feijão
-    char* feijao_situacao = avaliar_situacao_item_de_cesta(feijao_variacao);
-
-
-    // LER nome do item Óleo de soja
-    char* oleo_nome = "Óleo de soja";
-
-    // LER preço do mês anterior do item Óleo de soja
-    float oleo_preco_anterior = 6.5;
-
-    // LER preço do mês atual do item Óleo de soja
-    float oleo_preco_atual = 6.0;
-
-    // CALCULAR e armazenar variação de preços do item Óleo de soja
-    float oleo_variacao = calcular_variacao(oleo_preco_anterior, oleo_preco_atual); 
-
-    // AVALIAR e armazenar situação do item Óleo de soja
-    char* oleo_situacao = avaliar_situacao_item_de_cesta(oleo_variacao);
-  
-
-    // EXIBIR encabeçado do relatorio
-    printf("Resumo de variação de Preços:\n\n");
-
-    // EXIBIR informações e avaliação do item Arroz
-    printar_item_de_cesta(arroz_nome, arroz_preco_anterior, arroz_preco_atual, arroz_variacao, arroz_situacao);
-
-    // EXIBIR informações e avaliação do item Feijão
-    printar_item_de_cesta(feijao_nome, feijao_preco_anterior, feijao_preco_atual, feijao_variacao, feijao_situacao);
-   
-    // EXIBIR informações e avaliação do item Óleo de soja
-    printar_item_de_cesta(oleo_nome, oleo_preco_anterior, oleo_preco_atual, oleo_variacao, oleo_situacao);
+    // apresenta o programa
+    printf("Este programa avalia o aumento de preços em produtos alimentícios\n");
     
-    // FIM
-    return 0;
-}
+    while (i < PRODUCT_NUMBER) {
+        // inicializando variável como falsa
+        variacao_teve_abuso = 0;
 
-/* Calcula variação de preços */
-float calcular_variacao(float preco_anterior, float preco_atual) {
-    return (((preco_anterior - preco_atual) / preco_anterior) * 100);
-}
+        printf("\nAvaliando produto %d/%d...\n", i+1, PRODUCT_NUMBER);
 
-/*  Avalia a situação de um item da cesta básica em função da variação de seu preço  */
-char* avaliar_situacao_item_de_cesta(float variacao) {
-    if(variacao < 0) {
-        return "QUEDA";
-    } else if(variacao > 0) {
-        return "AUMENTO";
-    } else {
-        return "ESTÁVEL";
+        // perguntar nome do produto a avaliar
+        printf("Introduza o nome do produto a avaliar: ");
+
+        if (fgets(nome, sizeof(nome), stdin) != NULL) {
+            nome[strcspn(nome, "\n")] = '\0'; // eliminar salto de linha
+
+            // validar que não está vazio
+            if (nome[0] == '\0') {
+                printf("\nNão foi informado nenhum nome. Tente novamente.\n");
+                printf("Reiniciando avaliação do produto...\n\n");
+                continue;
+            }
+
+        } else {
+            printf("\nNão foi possível ler sua resposta\n");
+            printf("Reiniciando avaliação do produto...\n\n");
+            while (getchar() != '\n'); // limpar buffer
+            continue;
+        }
+
+        // perguntar preço do mês anterior
+        printf("Introduza o preço do produto (%s) no mês anterior: ", nome);
+        leitura_correta = scanf("%f", &preco_anterior);
+        if (leitura_correta != 1) {
+            printf("\nPor favor, introduza um número. Se tiver decimais, use ponto (.) em vez de vírgula (,)\n");
+            printf("Reiniciando avaliação do produto...\n\n");
+            while (getchar() != '\n'); // limpar buffer
+            continue;
+        }
+
+        // perguntar preço do mês atual
+        printf("Introduza o preço do produto (%s) no mês atual: ", nome);
+        leitura_correta = scanf("%f", &preco_atual);
+        if (leitura_correta != 1) {
+            printf("\nPor favor, introduza um número. Se tiver decimais, use ponto (.) em vez de vírgula (,)\n");
+            printf("Reiniciando avaliação do produto...\n\n");
+            while (getchar() != '\n'); // limpar buffer
+            continue;
+        }
+
+        // calcular situação do item
+        variacao = ((preco_atual - preco_anterior) / preco_anterior) * 100;
+
+        if (variacao < 0) {
+            situacao = "QUEDA";
+        } else if (variacao > 0) {
+            situacao = "AUMENTO";
+            
+            // conferindo se houve abuso no aumento
+            if (variacao > 10) {
+                variacao_teve_abuso = 1;
+            } 
+
+        } else {
+            situacao = "ESTÁVEL";
+        }
+
+        ProdutoCestaBasica temp = {
+            nome,
+            preco_anterior,
+            preco_atual,
+            variacao,
+            situacao,
+            variacao_teve_abuso
+        };
+
+        cesta_basica[i] = temp;
+        i++;
+
+        while (getchar() != '\n'); // limpar buffer
     }
-} 
 
-/* printa as informações de um produto da cesta no relatório */
-void printar_item_de_cesta(char * nome, float preco_anterior, float preco_atual, float variacao, char * situacao) {
-    printf("Produto: %s\n\tPreço Anterior: R$%.2f\n\tPreço Atual: R$%.2f\n\tVariação: %.2f%%\n\tSituação: %s\n\n", nome, preco_anterior, preco_atual, variacao, situacao);
+    // exibir cabeçalho do resumo
+    printf("\nResumo de variação de preços:\n\n");
+
+    // imprimir resumo dos itens
+    for (int i = 0; i < PRODUCT_NUMBER; i++) {
+        printf("Produto: %s\n", cesta_basica[i].nome);
+        printf("    Preço Anterior: R$%.2f\n", cesta_basica[i].preco_anterior);
+        printf("    Preço Atual: R$%.2f\n", cesta_basica[i].preco_atual);
+        printf("    Variação: %.2f%%\n", cesta_basica[i].variacao);
+        printf("    Situação: %s\n", cesta_basica[i].situacao);
+        if (cesta_basica[i].variacao_teve_abuso) {
+            printf("    AUMENTO DE PREÇO ABUSIVO!!\n\n");
+        } else {
+            printf("\n");
+        }
+    }
 }
